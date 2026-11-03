@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: pj_fintrack_raw
+    database: PJ_FINTRACK_DB
+    schema: RAW
+    description: "Tables brutes qui ocntient les données brutes"
+
+    tables:
+      - name: raw_comptes
+      - name: raw_budgets
+      - name: raw_transactions
+      - name: raw_categories
