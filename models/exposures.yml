@@ -1,0 +1,48 @@
+version: 2
+
+exposures:
+
+  - name: dashboard_suivi_budgetaire_client
+    label: "Suivi budgétaire client"
+    type: dashboard
+    maturity: high
+
+    description: >
+      Dashboard Metabase permettant de suivre les budgets prévus,
+      les dépenses réelles et la situation budgétaire des clients.
+
+    depends_on:
+      - ref('mart_budget_vs_reel')
+      - ref('dim_comptes')
+
+    owner:
+      name: Équipe Finance
+      email: marel.agonglo@freelanceclubs.com
+
+    config:
+      meta:
+        outil: Metabase
+
+  - name: rapport_synthese_mensuelle
+    label: "Synthèse mensuelle"
+    type: application
+    maturity: medium
+
+    description: >
+      Rapport automatisé présentant les soldes mensuels,
+      les transactions et les catégories de dépenses.
+
+    depends_on:
+      - ref('mart_solde_mensuel')
+      - ref('fct_transactions')
+      - ref('dim_categories')
+
+    owner:
+      name: Équipe Finance
+      email: marel.agonglo@freelanceclubs.com
+
+    # AJOUT DE CONFIG ICI
+    config:
+      meta:
+        frequence: mensuelle
+        format: rapport automatise
