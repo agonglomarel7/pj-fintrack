@@ -76,8 +76,6 @@ Le projet permet notamment :
 
 Snowflake | dbt Core | SQL | Jinja | Git | Metabase
 
-{% enddocs %}
-
 
 ### Using the starter project
 
