@@ -42,6 +42,6 @@ models:
       +schema: MARTS
       +materialized: table
 
-
+docs-paths: ["docs"]
 on-run-end:
   - "{{ log_dbt_run(results) }}"

@@ -9,3 +9,6 @@ models:
       - name: solde_cumule
         data_tests:
           - not_null
+
+  - name: dim_comptes
+    description: "{{ doc('project_home') }}"
