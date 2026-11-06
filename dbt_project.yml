@@ -41,3 +41,7 @@ models:
     marts:            # Vérifiez si votre dossier s'appelle mart ou marts (le warning dit mart)
       +schema: MARTS
       +materialized: table
+
+docs-paths: ["docs"]
+on-run-end:
+  - "{{ log_dbt_run(results) }}"

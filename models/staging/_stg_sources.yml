@@ -4,10 +4,35 @@ sources:
   - name: pj_fintrack_raw
     database: PJ_FINTRACK_DB
     schema: RAW
-    description: "Tables brutes qui ocntient les données brutes"
+    description: "Tables brutes qui contiennent les données brutes"
 
     tables:
       - name: raw_comptes
+
       - name: raw_budgets
+
       - name: raw_transactions
+        config:
+          loaded_at_field: updated_at
+          freshness:
+            warn_after:
+              count: 24
+              period: hour
+            error_after:
+              count: 48
+              period: hour
+
       - name: raw_categories
+
+      - name: raw_virements
+        config:
+          loaded_at_field: updated_at
+          freshness:
+            warn_after:
+              count: 24
+              period: hour
+            error_after:
+              count: 48
+              period: hour
+
+      - name: raw_alertes

@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: mart_solde_mensuel
+    data_tests:
+      - solde_epargne_non_negatif
+
+    columns:
+      - name: solde_cumule
+        data_tests:
+          - not_null
+
+  - name: dim_comptes
+    description: "{{ doc('project_home') }}"

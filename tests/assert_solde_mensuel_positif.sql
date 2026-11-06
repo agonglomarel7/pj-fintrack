@@ -6,3 +6,4 @@ select
 from {{ ref('mart_solde_mensuel') }}
 where type_compte = 'epargne'
   and solde_cumule < 0
+
