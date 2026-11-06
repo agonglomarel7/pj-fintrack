@@ -5,7 +5,8 @@
         unique_key='transaction_id',
         incremental_strategy='merge',
         on_schema_change='sync_all_columns',
-        full_refresh = false 
+        full_refresh = false,
+        pre_hook="{{ log_incremental_watermark() }}"
     
     )
 }}
