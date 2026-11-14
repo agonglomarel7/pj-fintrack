@@ -1,5 +1,5 @@
 
-{% test test_taux_null(model, column_name, seuil_pct) %}
+{% test taux_null(model, column_name, seuil_pct) %}
 
     select
         count(*) as total_lignes,

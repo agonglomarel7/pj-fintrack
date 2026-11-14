@@ -10,7 +10,7 @@ with transactions as (
 
     select
         compte_id,
-        mois_transaction as mois,
+        {{ generer_periode('mois_transaction') }} as periode,
 
         sum(case
             when type_operation = 'credit' then montant
@@ -30,7 +30,7 @@ with transactions as (
 
     group by
         compte_id,
-        mois_transaction
+        {{ generer_periode('mois_transaction') }}
 
 ),
 
@@ -39,7 +39,7 @@ virements as (
 
     select
         compte_id,
-        date_trunc('month', date_virement)::date as mois,
+        {{ generer_periode("date_virement") }} as periode,
 
         sum(case
             when sens = 'entrant' then montant_virement
@@ -57,11 +57,11 @@ virements as (
 
     group by
         compte_id,
-        date_trunc('month', date_virement)::date
+        {{ generer_periode("date_virement") }}
 
 ),
 
--- 3. Regroupement des transactions et virements
+-- 3. Regroupement des mouvements
 tous_les_mouvements as (
 
     select * from transactions
@@ -77,7 +77,7 @@ transactions_mensuelles as (
 
     select
         compte_id,
-        mois,
+        periode,
         sum(total_credits) as total_credits,
         sum(total_debits) as total_debits,
         sum(solde_net_mois) as solde_net_mois
@@ -86,7 +86,7 @@ transactions_mensuelles as (
 
     group by
         compte_id,
-        mois
+        periode
 
 ),
 
@@ -103,21 +103,39 @@ comptes as (
 
 )
 
--- 6. Calcul du solde cumulé
+-- 6. Calcul des soldes et conversion en centimes
 select
     tm.compte_id,
     c.nom_client,
     c.type_compte,
-    tm.mois,
+
+    tm.periode,
+    to_date(tm.periode || '-01') as mois,
+
     tm.total_credits,
     tm.total_debits,
     tm.solde_net_mois,
 
+    -- Conversion des montants en centimes
+    {{ convertir_centimes('tm.total_credits') }} as total_credits_centimes,
+    {{ convertir_centimes('tm.total_debits') }} as total_debits_centimes,
+    {{ convertir_centimes('tm.solde_net_mois') }} as solde_net_centimes,
+
+    -- Solde cumulé en euros
     c.solde_initial + sum(tm.solde_net_mois) over (
         partition by tm.compte_id
-        order by tm.mois
+        order by tm.periode
         rows between unbounded preceding and current row
-    ) as solde_cumule
+    ) as solde_cumule,
+
+    -- Solde cumulé en centimes
+    {{ convertir_centimes(
+        'c.solde_initial + sum(tm.solde_net_mois) over (
+            partition by tm.compte_id
+            order by tm.periode
+            rows between unbounded preceding and current row
+        )'
+    ) }} as solde_cumule_centimes
 
 from transactions_mensuelles tm
 
