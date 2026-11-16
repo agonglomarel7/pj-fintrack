@@ -1,3 +1,11 @@
+
+{{
+    config(
+        materialized='view',
+        tags=['staging', 'reference']
+    )
+}}
+
 with source as (
     select * from {{ source('pj_fintrack_raw', 'raw_categories') }}
 )

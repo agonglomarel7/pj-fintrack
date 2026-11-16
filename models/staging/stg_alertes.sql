@@ -1,3 +1,11 @@
+
+{{
+    config(
+        materialized='view',
+        tags=['staging', 'finance', 'alertes']
+    )
+}}
+
 with alertes as (
     select * from {{ source('pj_fintrack_raw', 'raw_alertes') }}
 ),
