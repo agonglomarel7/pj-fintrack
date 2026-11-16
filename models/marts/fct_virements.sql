@@ -5,13 +5,18 @@
 -- Si la structure change (ex: nouvelle colonne), dbt adapte la table
 
 
-{{ config(
 
-    materialized='incremental',
-    unique_key='mouvement_virement_id',
-    incremental_strategy='merge',
-    on_schema_change='sync_all_columns'
-) }}
+{{
+    config(
+        materialized='incremental',
+        unique_key='mouvement_virement_id',
+        incremental_strategy='merge',
+        on_schema_change='sync_all_columns',
+        full_refresh=false,
+        tags=['marts', 'finance', 'daily'],
+        pre_hook="{{ log_incremental_watermark() }}"
+    )
+}}
 -- ÉTAPE 1 : Récupération des données brutes (Sources)
 with virements as (
     select *

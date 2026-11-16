@@ -1,3 +1,11 @@
+
+{{
+    config(
+        materialized='view',
+        tags=['staging', 'finance']
+    )
+}}
+
 with virement  as (
     select * from {{ source('pj_fintrack_raw', 'raw_virements') }}
 )

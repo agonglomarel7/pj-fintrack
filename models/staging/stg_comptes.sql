@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='view',
+        tags=['staging', 'finance']
+    )
+}}
+
 with source as (
     select * from {{ source('pj_fintrack_raw', 'raw_comptes') }}
 )

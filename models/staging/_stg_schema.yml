@@ -1,3 +1,4 @@
+
 version: 2
 
 models:
@@ -9,10 +10,12 @@ models:
         tests:
           - unique
           - not_null
+
       - name: type_compte
         tests:
           - accepted_values:
               values: ['courant', 'epargne', 'joint']
+
       - name: statut
         tests:
           - accepted_values:
@@ -25,6 +28,7 @@ models:
         tests:
           - unique
           - not_null
+
       - name: compte_id
         tests:
           - relationships:
@@ -46,3 +50,13 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: stg_virements
+    description: "Virements nettoyés et standardisés"
+    columns:
+      - name: motif_virement
+        description: "Motif du virement, issu de la source raw_virements"
+        tests:
+          - taux_null:
+              arguments:
+                seuil_pct: 10

@@ -1,3 +1,4 @@
+
 version: 2
 
 models:
@@ -12,3 +13,34 @@ models:
 
   - name: dim_comptes
     description: "{{ doc('project_home') }}"
+
+  # Test dbt-expectations : montant des transactions strictement positif
+  - name: fct_transactions
+    columns:
+      - name: montant
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                strictly: true
+
+  # Test dbt-expectations : montant des virements strictement positif
+  - name: fct_virements
+    columns:
+      - name: montant_virement
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                strictly: true
+
+  # Test dbt-expectations : montant prévu positif ou nul
+  - name: mart_budget_vs_reel
+    columns:
+      - name: montant_prevu
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                strictly: false
